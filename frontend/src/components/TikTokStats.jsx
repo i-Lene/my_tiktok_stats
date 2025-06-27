@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchUserData } from "../../utils/api_helper";
 import LineChart from "./LineChart";
+import "./TikTokStats.scss";
 
 export default function TikTokStats() {
   const [data, setData] = useState([]);
@@ -29,7 +30,7 @@ export default function TikTokStats() {
   const yValuesLikes = sortedData.map((item) => item.heartCount);
 
   return (
-    <>
+    <div className="tiktok-stats">
       <div>
         <h2>TikTok Follower Count Over Time</h2>
         <LineChart
@@ -50,6 +51,6 @@ export default function TikTokStats() {
           dataPoints={yValuesLikes}
         />
       </div>
-    </>
+    </div>
   );
 }

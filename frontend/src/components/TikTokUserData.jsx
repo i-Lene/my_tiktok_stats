@@ -15,46 +15,50 @@ export default function TikTokUserData() {
   const userdata = data && data.length > 0 ? data[0][0] : null;
 
   return (
-    <div className="tiktok-user-data">
-      <h1>TikTok User Data</h1>
+    <div className="tiktok_user_data">
+      <h1>
+        TikTok <span>@{userdata?.username} </span>
+        User Data
+      </h1>
       {data && (
         <div>
-          <img
-            src={userdata.avatar}
-            alt={`${userdata.nickname}'s avatar`}
-            className="avatar"
-          />
-          <p>
-            <strong>Username: </strong>
-            <span>{userdata.username}</span>
-          </p>
-          <p>
-            <strong>Name: </strong>
-            <span>{userdata.nickname}</span>
-          </p>
-          <p>
-            <strong>Bio: </strong>
-            <span>{userdata.description}</span>
-          </p>
-          <p>
-            <strong>Followers: </strong>
-            <span>{userdata.followerCount}</span>
-          </p>
-          <p></p>
-          <strong>Following: </strong>
-          <span>{userdata.followingCount}</span>
-          <p>
-            <strong>Friends: </strong>
-            <span>{userdata.friendCount}</span>
-          </p>
-          <p>
-            <strong>Likes: </strong>
-            <span>{userdata.heartCount}</span>
-          </p>
-          <p>
-            <strong>Videos: </strong>
-            <span>{userdata.videoCount}</span>
-          </p>
+          <div className="avatar_container">
+            <img
+              src={userdata.avatar}
+              alt={`${userdata.nickname}'s avatar`}
+              className="avatar"
+            />
+          </div>
+          <div className="user_info">
+            <p className="nickname">
+              <span>{userdata.nickname}</span>
+            </p>
+            <p className="description">
+              <span>{userdata.description}</span>
+            </p>
+            <div className="stats">
+              <p className="followers">
+                <strong>Followers: </strong>
+                <span>{userdata.followerCount}</span>
+              </p>
+              <p className="following">
+                <strong>Following: </strong>
+                <span>{userdata.followingCount}</span>
+              </p>
+              <p className="friends">
+                <strong>Friends: </strong>
+                <span>{userdata.friendCount}</span>
+              </p>
+              <p className="likes">
+                <strong>Likes: </strong>
+                <span>{userdata.heartCount}</span>
+              </p>
+              <p className="videos_count">
+                <strong>Videos: </strong>
+                <span>{userdata.videoCount}</span>
+              </p>
+            </div>
+          </div>
         </div>
       )}
     </div>

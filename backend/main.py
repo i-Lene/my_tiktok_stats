@@ -39,6 +39,17 @@ class TikTokDB(Base):
     createdAt = Column(String, default=currentTime, nullable=True)
 
 
+class UserVideosDB(Base):
+    __tablename__ = "user_videos_data"
+    id = Column(Integer, primary_key=True, index=True)
+    videoName = Column(String, nullable=True)
+    viewCount = Column(Integer, nullable=True)
+    likeCount = Column(Integer, nullable=True)
+    shareCount = Column(Integer, nullable=True)
+    collectCount = Column(Integer, nullable=True)
+    createdAt = Column(String, default=currentTime, nullable=True)
+
+
 Base.metadata.create_all(bind=engine)
 
 
@@ -52,6 +63,15 @@ class Entry(BaseModel):
     followingCount: int = None
     avatar: str = None
     description: str = None
+    createdAt: str = currentTime
+
+
+class UserVideos(BaseModel):
+    videoName: str = None
+    viewCount: int = None
+    likeCount: int = None
+    shareCount: int = None
+    collectCount: int = None
     createdAt: str = currentTime
 
 
@@ -125,6 +145,41 @@ def get_tiktok_data(db: Session = Depends(get_db)):
     ]
 
 
+@app.post("/add_user_videos", response_model=UserVideos)
+def add_user_videos(user_videos: UserVideos, db: Session = Depends(get_db)):
+    db_video = UserVideosDB(videoName=user_videos.videoName,
+                            viewCount=user_videos.viewCount,
+                            likeCount=user_videos.likeCount,
+                            shareCount=user_videos.shareCount,
+                            createdAt=currentTime
+                            )
+    db.add(db_video)
+    db.commit()
+    db.refresh(db_video)
+    return UserVideos(videoName=db_video.videoName,
+                      viewCount=db_video.viewCount,
+                      likeCount=db_video.likeCount,
+                      shareCount=db_video.shareCount,
+                      createdAt=db_video.createdAt
+                      )
+
+
+@app.get("/get_user_videos", response_model=List[UserVideos])
+def get_user_videos(db: Session = Depends(get_db)):
+    data = db.query(UserVideosDB).all()
+    return [
+        UserVideos(
+            videoName=item.videoName,
+            viewCount=item.viewCount,
+            likeCount=item.likeCount,
+            shareCount=item.shareCount,
+            collectCount=item.collectCount,
+            createdAt=item.createdAt
+        )
+        for item in data
+    ]
+
+
 async def init_data():
     data = await myTikTokSatus()
 
@@ -153,6 +208,28 @@ async def init_data():
         db.close()
 
 
+async def init_videos():
+    data = await myTikTokSatus()
+
+    db = SessionLocal()
+
+    try:
+        for video in data['videos']:
+            new_video = UserVideosDB(
+                videoName=video['desc'],
+                viewCount=video['stats']['playCount'],
+                likeCount=video['stats']['diggCount'],
+                shareCount=video['stats']['shareCount'],
+                collectCount=video['stats']['collectCount'] if 'collectCount' in video['stats'] else 0,
+                createdAt=video['createTime'] if 'createTime' in video else currentTime
+            )
+            db.add(new_video)
+        db.commit()
+
+    finally:
+        db.close()
+
 if __name__ == "__main__":
     asyncio.run(init_data())
+    asyncio.run(init_videos())
     uvicorn.run(app, host="0.0.0.0", port=8001)

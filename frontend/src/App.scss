@@ -1,0 +1,31 @@
+@use "../utils/variables.scss" as vars;
+
+@font-face {
+  font-family: "NeutralFace";
+  src: url("./assets/fonts/NeutralFace.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "NeutralFace";
+  src: url("./assets/fonts/NeutralFace-Bold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+body {
+  font-family: "Geist", sans-serif;
+  padding: vars.$desktop_padding;
+  margin: auto;
+  width: vars.$body_max_with;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "NeutralFace", sans-serif;
+  }
+
+}

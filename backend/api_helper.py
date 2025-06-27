@@ -1,6 +1,8 @@
+import json
 from TikTokApi import TikTokApi
 import os
 from dotenv import load_dotenv
+
 
 load_dotenv()
 ms_token = os.getenv("MS_TOKEN")
@@ -19,13 +21,10 @@ async def myTikTokSatus():
         user = api.user("gingerflwrs")
         user_data = await user.info()
 
-        # videos = []
+        videos = []
 
-        # async for video in user.videos(count=2):
-        # videos.append(video.as_dict)
-
-        # if len(videos) >= 2:
-        # break
+        async for video in user.videos(count=1000):
+            videos.append(video.as_dict)
 
     status_dict = {
         "username": user_data["userInfo"]["user"]["uniqueId"],
@@ -37,8 +36,7 @@ async def myTikTokSatus():
         "followingCount": user_data["userInfo"]["stats"]["followingCount"],
         "avatar": user_data["userInfo"]["user"]["avatarLarger"],
         "description": user_data["userInfo"]["user"]["signature"],
+        "videos": videos
     }
-    
-    
 
     return status_dict

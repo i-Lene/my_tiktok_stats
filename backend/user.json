@@ -1,0 +1,71 @@
+{
+    "extra": {
+        "fatal_item_ids": [],
+        "logid": "202506251554143A4A316604501047F625",
+        "now": 1750866854000
+    },
+    "log_pb": {
+        "impr_id": "202506251554143A4A316604501047F625"
+    },
+    "shareMeta": {
+        "desc": "@gingerflwrs 81 Followers, 189 Following, 2970 Likes - Watch awesome short videos created by marlene",
+        "title": "marlene on TikTok"
+    },
+    "statusCode": 0,
+    "status_code": 0,
+    "status_msg": "",
+    "userInfo": {
+        "stats": {
+            "diggCount": 0,
+            "followerCount": 81,
+            "followingCount": 189,
+            "friendCount": 39,
+            "heart": 2970,
+            "heartCount": 2970,
+            "videoCount": 61
+        },
+        "statsV2": {
+            "diggCount": "0",
+            "followerCount": "81",
+            "followingCount": "189",
+            "friendCount": "39",
+            "heart": "2970",
+            "heartCount": "2970",
+            "videoCount": "61"
+        },
+        "user": {
+            "UserStoryStatus": 0,
+            "avatarLarger": "https://p16-pu-sign-no.tiktokcdn-eu.com/tos-no1a-avt-0068c700-no/48a1216fceac59d3b471cf2d3f6ca692~tplv-tiktokx-cropcenter:1080:1080.jpeg?dr=10399&refresh_token=ed7f69ca&x-expires=1751036400&x-signature=A4mGKKtqH1tdQyNn%2FXaev4fPbjg%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast2b",
+            "avatarMedium": "https://p16-pu-sign-no.tiktokcdn-eu.com/tos-no1a-avt-0068c700-no/48a1216fceac59d3b471cf2d3f6ca692~tplv-tiktokx-cropcenter:720:720.jpeg?dr=10399&refresh_token=d86bed97&x-expires=1751036400&x-signature=bfcQ7kHFtSLXV2wmdH7o6rCAqEQ%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast2b",
+            "avatarThumb": "https://p16-pu-sign-no.tiktokcdn-eu.com/tos-no1a-avt-0068c700-no/48a1216fceac59d3b471cf2d3f6ca692~tplv-tiktokx-cropcenter:100:100.jpeg?dr=10399&refresh_token=fe81d5e1&x-expires=1751036400&x-signature=buSEHPn%2BGSwvTzNselVS20I2o28%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast2b",
+            "canExpPlaylist": true,
+            "commentSetting": 0,
+            "commerceUserInfo": {
+                "commerceUser": false
+            },
+            "downloadSetting": 0,
+            "duetSetting": 0,
+            "followingVisibility": 1,
+            "ftc": false,
+            "id": "6972659841379255302",
+            "isADVirtual": false,
+            "isEmbedBanned": false,
+            "nickNameModifyTime": 1624635630,
+            "nickname": "marlene",
+            "openFavorite": false,
+            "privateAccount": false,
+            "profileEmbedPermission": 1,
+            "profileTab": {
+                "showPlayListTab": false
+            },
+            "relation": 0,
+            "secUid": "MS4wLjABAAAAXS8tshE8LuXzR8X25xioFdBiSl4oGIgidHX4-njP-rg3uKfvD6PKmDxw7a1IdYiB",
+            "secret": false,
+            "signature": "Porto 🍒\nfashion || lifestyle \nig: @gingerflwrs",
+            "stitchSetting": 0,
+            "ttSeller": false,
+            "uniqueId": "gingerflwrs",
+            "verified": false
+        }
+    }
+}

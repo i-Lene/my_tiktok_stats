@@ -5,25 +5,49 @@ import "./TikTokStats.scss";
 
 export default function TikTokStats() {
   const [data, setData] = useState([]);
+  const [view, setView] = useState("30days");
 
   useEffect(() => {
     async function getData() {
       const userData = await fetchUserData();
-      setData(userData);
+      let flat = userData;
+      if (Array.isArray(userData) && Array.isArray(userData[0])) {
+        flat = userData[0];
+      }
+      setData(flat || []);
     }
     getData();
   }, []);
 
   if (!data || data.length === 0) return <div>No Data</div>;
 
+  let filteredData = [];
+  const now = new Date();
 
-  const thirtyDaysAgo = new Date();
-  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-
-  const filteredData = data.filter((item) => {
-    const itemDate = new Date(item.createdAt);
-    return itemDate >= thirtyDaysAgo;
-  });
+  if (view === "30days") {
+    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    filteredData = data.filter((item) => {
+      const itemDate = new Date(item.createdAt);
+      return itemDate >= thirtyDaysAgo && itemDate <= now;
+    });
+  } else if (view === "monthly") {
+    const byMonth = {};
+    data.forEach((item) => {
+      const date = new Date(item.createdAt);
+      const key = `${date.getFullYear()}-${(date.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}`;
+      if (
+        !byMonth[key] ||
+        new Date(item.createdAt) > new Date(byMonth[key].createdAt)
+      ) {
+        byMonth[key] = item;
+      }
+    });
+    filteredData = Object.values(byMonth).sort(
+      (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+    );
+  }
 
   const sortedData = [...filteredData].sort(
     (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
@@ -31,7 +55,11 @@ export default function TikTokStats() {
 
   const xValues = sortedData.map((item) => {
     const date = new Date(item.createdAt);
-    return date.toLocaleDateString("pt-PT");
+    return view === "monthly"
+      ? `${date.toLocaleString("default", {
+          month: "short",
+        })} ${date.getFullYear()}`
+      : date.toLocaleDateString("pt-PT");
   });
 
   const yValuesFollowers = sortedData.map((item) => item.followerCount);
@@ -40,20 +68,31 @@ export default function TikTokStats() {
   return (
     <div className="tiktok-stats">
       <div>
-        <h2>TikTok Follower Count Over Time</h2>
+        <label>View: </label>
+        <select value={view} onChange={(e) => setView(e.target.value)}>
+          <option value="30days">Last 30 Days</option>
+          <option value="monthly">Monthly (latest per month)</option>
+        </select>
+      </div>
+      <div>
+        <h2>
+          Follower Count {view === "monthly" ? "(Monthly)" : "(Last 30 Days)"}
+        </h2>
         <LineChart
           labelTitle="Follower Count"
-          xtitle={"Date"}
+          xtitle={view === "monthly" ? "Month" : "Date"}
           ytitle={"Followers"}
           labels={xValues}
           dataPoints={yValuesFollowers}
         />
       </div>
       <div>
-        <h2>TikTok Likes Count Over Time</h2>
+        <h2>
+          Likes Count {view === "monthly" ? "(Monthly)" : "(Last 30 Days)"}
+        </h2>
         <LineChart
           labelTitle="Likes Count"
-          xtitle={"Date"}
+          xtitle={view === "monthly" ? "Month" : "Date"}
           ytitle={"Likes"}
           labels={xValues}
           dataPoints={yValuesLikes}

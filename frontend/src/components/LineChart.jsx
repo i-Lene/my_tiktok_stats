@@ -7,6 +7,8 @@ export default function LineChart({
   xtitle,
   ytitle,
   labelTitle,
+  borderColor = "rgb(235, 86, 143)",
+  backgroundColor = "rgba(209, 109, 171, 0.2)",
 }) {
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
@@ -25,12 +27,12 @@ export default function LineChart({
         datasets: [
           {
             label: labelTitle,
-            backgroundColor: "rgba(209, 109, 171, 0.2)",
-            borderColor: "rgb(235, 86, 143)",
+            backgroundColor: backgroundColor,
+            borderColor: borderColor,
             data: dataPoints,
             fill: true,
             tension: 0.3,
-            pointRadius: 4,
+            pointRadius: window.innerWidth < 1024 ? 0 : 4,
           },
         ],
       },
@@ -57,7 +59,15 @@ export default function LineChart({
         chartInstance.current.destroy();
       }
     };
-  }, [labels, dataPoints, xtitle, ytitle, labelTitle]);
+  }, [
+    labels,
+    dataPoints,
+    xtitle,
+    ytitle,
+    labelTitle,
+    backgroundColor,
+    borderColor,
+  ]);
 
   return <canvas ref={chartRef} />;
 }

@@ -12,7 +12,7 @@ export default function TikTokUserData() {
     getData();
   }, []);
 
-  const userdata = data && data.length > 0 ? data[0][0] : null;
+  const userdata = data && data.length > 0 ? data[0] : null;
 
   return (
     <div className="tiktok_user_data">

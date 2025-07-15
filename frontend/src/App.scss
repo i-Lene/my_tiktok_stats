@@ -1,5 +1,10 @@
 @use "../utils/variables.scss" as vars;
 
+@import url("bootstrap");
+@import url("datatables.net-bs5");
+@import url("datatables.net-responsive-bs5");
+@import url("datatables.net-select-bs5");
+
 @font-face {
   font-family: "NeutralFace";
   src: url("./assets/fonts/NeutralFace.otf") format("opentype");
@@ -16,8 +21,10 @@
 body {
   font-family: "Geist", sans-serif;
   padding: vars.$desktop_padding;
+  max-width: 100%;
   margin: auto;
   width: vars.$body_max_with;
+  overflow-x: hidden;
 
   h1,
   h2,
@@ -27,5 +34,36 @@ body {
   h6 {
     font-family: "NeutralFace", sans-serif;
   }
+
+  .table-container {
+    width: 100%;
+    display: block;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+
+    th,
+    td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    thead {
+      white-space: nowrap;
+    }
+
+    th {
+    }
+
+    tr:nth-child(even) {
+    }
+  }
+
+
+
 
 }

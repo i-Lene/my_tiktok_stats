@@ -23,7 +23,7 @@ async def myTikTokSatus():
 
         videos = []
 
-        async for video in user.videos(count=1000):
+        async for video in user.videos(count=100000):
             videos.append(video.as_dict)
 
     status_dict = {

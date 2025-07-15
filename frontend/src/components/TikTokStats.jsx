@@ -14,19 +14,27 @@ export default function TikTokStats() {
     getData();
   }, []);
 
-  if (!data[0]) return <div>Loading...</div>;
+  if (!data || data.length === 0) return <div>No Data</div>;
 
-  const sortedData = [...data[0]].sort(
+
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+  const filteredData = data.filter((item) => {
+    const itemDate = new Date(item.createdAt);
+    return itemDate >= thirtyDaysAgo;
+  });
+
+  const sortedData = [...filteredData].sort(
     (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
   );
 
   const xValues = sortedData.map((item) => {
     const date = new Date(item.createdAt);
-    return date.toLocaleDateString('pt-PT');
+    return date.toLocaleDateString("pt-PT");
   });
 
   const yValuesFollowers = sortedData.map((item) => item.followerCount);
-
   const yValuesLikes = sortedData.map((item) => item.heartCount);
 
   return (

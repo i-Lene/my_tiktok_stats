@@ -1,8 +1,18 @@
 import { useEffect, useState } from "react";
 import { fetchVideosData } from "../../utils/api_helper";
+import * as bootstrap from "bootstrap";
+import DataTable from "datatables.net-react";
+import DataTablesCore from "datatables.net-bs5";
+import "datatables.net-responsive-bs5";
+import "datatables.net-select-bs5";
+import Responsive from "datatables.net-responsive-bs5";
 
 export default function VideosData() {
   const [data, setData] = useState([]);
+
+  DataTablesCore.use(bootstrap);
+  DataTable.use(DataTablesCore);
+  DataTable.use(Responsive);
 
   useEffect(() => {
     async function getData() {
@@ -12,49 +22,87 @@ export default function VideosData() {
     getData();
   }, []);
 
+
+  const isMobile = window.innerWidth < 1024;
+
   return (
     <div className="videos_data">
       <h2>TikTok Videos Data</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Video ID</th>
-            <th>Title</th>
-            <th>View Count</th>
-            <th>Like Count</th>
-            <th>Share Count</th>
-            <th>Collect Count</th>
-            <th>Created At</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data && data.length > 0 ? (
-            data[0].map((video, index) => {
-              let dateString = "";
-              if (video.createdAt) {
-                const date = new Date(Number(video.createdAt) * 1000);
-                dateString = date.toLocaleDateString("pt-PT");
-              }
+      <div className="table-container">
+        <DataTable
+          style={{ width: "100%" }}
+          data={data || []}
+          className="display"
+          options={{
+            columns: [
+              {
+                title: "Title",
+                data: "videoName", 
+                responsivePriority: 1,
+                className: "all",
+              },
+              {
+                title: "View Count",
+                data: "viewCount",
+                responsivePriority: 100,
+                className: isMobile && "none",
+              },
+              {
+                title: "Like Count",
+                data: "likeCount",
+                responsivePriority: 101,
+                className: isMobile && "none",
+              },
+              {
+                title: "Share Count",
+                data: "shareCount",
+                responsivePriority: 102,
+                className: isMobile && "none",
+              },
+              {
+                title: "Collect Count",
+                data: "collectCount",
+                responsivePriority: 103,
+                className: isMobile && "none",
+              },
+              {
+                title: "Comment Count",
+                data: "commentCount",
+                responsivePriority: 104,
+                className: isMobile && "none",
+              },
+              {
+                title: "Created At",
+                data: "createdAt",
+                responsivePriority: 104,
+                className: isMobile && "none",
+                render: {
+                  display: function (data) {
+                    if (!data) return "";
+                    const date = new Date(Number(data) * 1000);
+                    const pad = (n) => n.toString().padStart(2, "0");
+                    const d = pad(date.getDate());
+                    const mo = pad(date.getMonth() + 1);
+                    const y = date.getFullYear();
+                    return `${d}-${mo}-${y}`;
+                  },
+                  sort: function (data) {
+                    return Number(data);
+                  },
+                },
+              },
+            ],
 
-              return (
-                <tr key={index + 1}>
-                  <td>{index + 1}</td>
-                  <td>{video.videoName}</td>
-                  <td>{video.viewCount}</td>
-                  <td>{video.likeCount}</td>
-                  <td>{video.shareCount}</td>
-                  <td>{video.collectCount}</td>
-                  <td>{dateString}</td>
-                </tr>
-              );
-            })
-          ) : (
-            <tr>
-              <td colSpan="8">No videos found</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            order: [[6, "desc"]],
+            select: false,
+            paging: true,
+            pageLength: 10,
+            scrollX: true,
+            responsive: true,
+            autoWidth: false,
+          }}
+        ></DataTable>
+      </div>
     </div>
   );
 }

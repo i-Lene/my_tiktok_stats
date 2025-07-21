@@ -1,0 +1,29 @@
+@use "../../utils/variables.scss" as vars;
+
+.tiktok_stats {
+  .view_selector {
+    text-align: end;
+
+    label {
+      font-weight: 600;
+      margin-right: 8px;
+    }
+  }
+
+  .charts_container {
+    display: flex;
+    gap: 20px;
+    margin-top: 30px;
+
+    .chart {
+      max-width: 100%;
+
+      h2 {
+        text-align: center;
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+      }
+    }
+  }
+}
+

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchUserData } from "../../utils/api_helper";
+import "./TikTokUserData.scss";
+import TikTokStats from "./TikTokStats";
 
 export default function TikTokUserData() {
   const [data, setData] = useState(null);
@@ -21,44 +23,47 @@ export default function TikTokUserData() {
         User Data
       </h1>
       {data && (
-        <div>
-          <div className="avatar_container">
-            <img
-              src={userdata.avatar}
-              alt={`${userdata.nickname}'s avatar`}
-              className="avatar"
-            />
-          </div>
-          <div className="user_info">
-            <p className="nickname">
-              <span>{userdata.nickname}</span>
-            </p>
-            <p className="description">
-              <span>{userdata.description}</span>
-            </p>
-            <div className="stats">
-              <p className="followers">
-                <strong>Followers: </strong>
-                <span>{userdata.followerCount}</span>
+        <div className="user_data_wrapper">
+          <div className="user_data_container">
+            <div className="avatar_container">
+              <img
+                src={userdata.avatar}
+                alt={`${userdata.nickname}'s avatar`}
+                className="avatar"
+              />
+            </div>
+            <div className="user_info">
+              <p className="nickname">
+                <span>{userdata.nickname}</span>
               </p>
-              <p className="following">
-                <strong>Following: </strong>
-                <span>{userdata.followingCount}</span>
+              <p className="description">
+                <span>{userdata.description}</span>
               </p>
-              <p className="friends">
-                <strong>Friends: </strong>
-                <span>{userdata.friendCount}</span>
-              </p>
-              <p className="likes">
-                <strong>Likes: </strong>
-                <span>{userdata.heartCount}</span>
-              </p>
-              <p className="videos_count">
-                <strong>Videos: </strong>
-                <span>{userdata.videoCount}</span>
-              </p>
+              <div className="stats">
+                <p className="followers">
+                  <strong>Followers: </strong>
+                  <span>{userdata.followerCount}</span>
+                </p>
+                <p className="following">
+                  <strong>Following: </strong>
+                  <span>{userdata.followingCount}</span>
+                </p>
+                <p className="friends">
+                  <strong>Friends: </strong>
+                  <span>{userdata.friendCount}</span>
+                </p>
+                <p className="likes">
+                  <strong>Likes: </strong>
+                  <span>{userdata.heartCount}</span>
+                </p>
+                <p className="videos_count">
+                  <strong>Videos: </strong>
+                  <span>{userdata.videoCount}</span>
+                </p>
+              </div>
             </div>
           </div>
+          <TikTokStats />
         </div>
       )}
     </div>

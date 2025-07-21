@@ -1,0 +1,68 @@
+@use "../../utils/variables.scss" as vars;
+
+.user_data_wrapper {
+  display: flex;
+  gap: 20px;
+}
+
+.tiktok_user_data {
+  text-align: center;
+  margin-bottom: 80px;
+
+  h1 {
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+}
+
+.user_data_container {
+  background: vars.$terciary_color;
+  border: 1px solid;
+  padding: 30px;
+  width: 40%;
+  max-width: 100%;
+  border-radius: 24px;
+
+  .avatar {
+    border-radius: 16px;
+    width: 100%;
+    max-width: 100%;
+    border: 1px solid black;
+  }
+
+  .user_info {
+    text-align: center;
+
+    .nickname {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+  }
+}
+
+.tiktok_stats {
+  width: 60%;
+
+  .charts_container {
+    flex-direction: column;
+
+    .chart {
+      width: 100%;
+    }
+  }
+}
+
+@media screen and (max-width: vars.$small_mobile_breakpoint) {
+  .user_data_wrapper {
+    flex-direction: column;
+
+    .user_data_container {
+      width: 100%;
+    }
+  }
+
+  .tiktok_stats {
+    width: 100%;
+  }
+}

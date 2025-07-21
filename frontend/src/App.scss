@@ -1,4 +1,5 @@
 @use "../utils/variables.scss" as vars;
+@import "@fortawesome/fontawesome-free/css/all.min.css";
 
 @import url("bootstrap");
 @import url("datatables.net-bs5");
@@ -25,6 +26,8 @@ body {
   margin: auto;
   width: vars.$body_max_with;
   overflow-x: hidden;
+  background-color: vars.$prtimary_color;
+  color: vars.$text_color;
 
   h1,
   h2,
@@ -33,6 +36,14 @@ body {
   h5,
   h6 {
     font-family: "NeutralFace", sans-serif;
+    color: vars.$secondary_color;
+  }
+
+  select {
+    background-color: vars.$terciary_color;
+    border-radius: 8px;
+    padding: 10px 16px;
+    color: vars.$text_color;
   }
 
   .table-container {
@@ -49,7 +60,7 @@ body {
     td {
       padding: 10px;
       text-align: left;
-      border-bottom: 1px solid #ddd;
+      border: 0;
     }
 
     thead {
@@ -57,13 +68,45 @@ body {
     }
 
     th {
+      border: 0;
+
+      &:hover {
+        border: 0;
+        outline: 0 !important;
+      }
+    }
+
+    tr {
+      border-bottom: 1px solid rgba(73, 44, 29, 0.3);
     }
 
     tr:nth-child(even) {
     }
+
+    &.dataTable {
+      thead {
+        tr {
+          th {
+            .dt-column-header {
+              .dt-column-title {
+                margin-right: 8px;
+              }
+              .dt-column-order {
+                &::before {
+                  content: "\f0de";
+                  font-family: "Font Awesome 5 Free";
+                  bottom: 30%;
+                }
+                &::after {
+                  content: "\f0dd";
+                  font-family: "Font Awesome 5 Free";
+                  top: 30%;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
-
-
-
-
 }

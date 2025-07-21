@@ -66,37 +66,43 @@ export default function TikTokStats() {
   const yValuesLikes = sortedData.map((item) => item.heartCount);
 
   return (
-    <div className="tiktok-stats">
-      <div>
+    <div className="tiktok_stats">
+      <div className="view_selector">
         <label>View: </label>
         <select value={view} onChange={(e) => setView(e.target.value)}>
           <option value="30days">Last 30 Days</option>
           <option value="monthly">Monthly (latest per month)</option>
         </select>
       </div>
-      <div>
-        <h2>
-          Follower Count {view === "monthly" ? "(Monthly)" : "(Last 30 Days)"}
-        </h2>
-        <LineChart
-          labelTitle="Follower Count"
-          xtitle={view === "monthly" ? "Month" : "Date"}
-          ytitle={"Followers"}
-          labels={xValues}
-          dataPoints={yValuesFollowers}
-        />
-      </div>
-      <div>
-        <h2>
-          Likes Count {view === "monthly" ? "(Monthly)" : "(Last 30 Days)"}
-        </h2>
-        <LineChart
-          labelTitle="Likes Count"
-          xtitle={view === "monthly" ? "Month" : "Date"}
-          ytitle={"Likes"}
-          labels={xValues}
-          dataPoints={yValuesLikes}
-        />
+      <div className="charts_container">
+        <div className="chart">
+          <h2>
+            Follower Count {view === "monthly" ? "(Monthly)" : "(Last 30 Days)"}
+          </h2>
+          <LineChart
+            labelTitle="Follower Count"
+            xtitle={view === "monthly" ? "Month" : "Date"}
+            ytitle={"Followers"}
+            labels={xValues}
+            dataPoints={yValuesFollowers}
+            borderColor="#1e9370"
+            backgroundColor="rgba(30, 147, 112, 0.2)"
+          />
+        </div>
+        <div className="chart">
+          <h2>
+            Likes Count {view === "monthly" ? "(Monthly)" : "(Last 30 Days)"}
+          </h2>
+          <LineChart
+            labelTitle="Likes Count"
+            xtitle={view === "monthly" ? "Month" : "Date"}
+            ytitle={"Likes"}
+            labels={xValues}
+            dataPoints={yValuesLikes}
+            borderColor="#1e9370"
+            backgroundColor="rgba(30, 147, 112, 0.2)"
+          />
+        </div>
       </div>
     </div>
   );

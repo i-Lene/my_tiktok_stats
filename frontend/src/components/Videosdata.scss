@@ -1,0 +1,42 @@
+@use "../../utils/variables.scss" as vars;
+
+.videos_data {
+  margin-bottom: 80px;
+
+  h2 {
+    margin-bottom: 30px;
+  }
+
+  .form-select,
+  .form-control {
+    background-color: vars.$terciary_color;
+    border: 1px solid;
+    border-radius: 8px;
+    padding: 10px 20px;
+    color: vars.$text_color;
+  }
+
+  .dtr-details {
+    li {
+      border-bottom: 0 !important;
+    }
+  }
+
+  .pagination {
+    .dt-paging-button {
+      button {
+        border: 1px solid vars.$text_color;
+        background-color: vars.$terciary_color;
+        border-radius: 8px;
+        color: vars.$text_color;
+      }
+
+      &.active, &:hover {
+        button {
+          background-color: vars.$secondary_color;
+          color: vars.$prtimary_color;
+        }
+      }
+    }
+  }
+}

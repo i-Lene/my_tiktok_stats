@@ -6,6 +6,7 @@ import DataTablesCore from "datatables.net-bs5";
 import "datatables.net-responsive-bs5";
 import "datatables.net-select-bs5";
 import Responsive from "datatables.net-responsive-bs5";
+import './Videosdata.scss';
 
 export default function VideosData() {
   const [data, setData] = useState([]);
@@ -27,7 +28,7 @@ export default function VideosData() {
 
   return (
     <div className="videos_data">
-      <h2>TikTok Videos Data</h2>
+      <h2>Posts Data</h2>
       <div className="table-container">
         <DataTable
           style={{ width: "100%" }}

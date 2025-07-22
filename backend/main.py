@@ -80,6 +80,11 @@ class UserVideos(BaseModel):
 
 app = FastAPI(debug=True)
 
+@app.get("/")
+def read_root():
+    return {"status": "FastAPI backend is running!", "endpoints": ["/get_tiktok_data", "/add_tiktok_data", "/get_user_videos", "/add_user_videos", "/docs"]}
+
+
 origins = [
     "http://localhost:5173"
 ]

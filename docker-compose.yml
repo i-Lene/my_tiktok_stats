@@ -1,0 +1,33 @@
+version: "3.9"
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8001:8001"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+  db:
+    image: sqlite3 # You are using SQLite; no need for a separate container unless switching to Postgres
+    # If using Postgres instead:
+    # image: postgres:15
+    # environment:
+    #   POSTGRES_USER: user
+    #   POSTGRES_PASSWORD: password
+    #   POSTGRES_DB: mydb
+    # volumes:
+    #   - postgres_data:/var/lib/postgresql/data
+
+# volumes:
+#   postgres_data:

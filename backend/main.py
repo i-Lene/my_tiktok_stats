@@ -11,6 +11,7 @@ from datetime import datetime
 import os
 from dotenv import load_dotenv
 from apscheduler.schedulers.background import BackgroundScheduler
+from fastapi.responses import Response
 
 load_dotenv()
 
@@ -203,6 +204,10 @@ def get_user_videos(db: Session = Depends(get_db)):
         for item in data
     ]
 
+
+@app.get("/favicon.ico")
+def favicon():
+    return Response(content="", media_type="image/x-icon")
 
 async def init_data():
     data = await myTikTokSatus()

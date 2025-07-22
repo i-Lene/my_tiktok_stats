@@ -81,6 +81,7 @@ class UserVideos(BaseModel):
 
 app = FastAPI(debug=True)
 
+
 @app.get("/")
 def read_root():
     return {"status": "FastAPI backend is running!", "endpoints": ["/get_tiktok_data", "/add_tiktok_data", "/get_user_videos", "/add_user_videos", "/docs"]}
@@ -209,6 +210,14 @@ def get_user_videos(db: Session = Depends(get_db)):
 @app.get("/favicon.ico")
 def favicon():
     return Response(content="", media_type="image/x-icon")
+
+
+@app.on_event("startup")
+async def startup_event():
+    schedule_daily_collection()
+    await init_data()
+    await init_videos()
+
 
 async def init_data():
     data = await myTikTokSatus()

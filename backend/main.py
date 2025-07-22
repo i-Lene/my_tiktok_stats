@@ -87,7 +87,8 @@ def read_root():
 
 
 origins = [
-    "http://localhost:5173"
+    "http://localhost:5173",
+    "https://my-tiktok-stats-1.onrender.com"
 ]
 
 app.add_middleware(

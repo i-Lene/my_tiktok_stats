@@ -11,8 +11,11 @@ from datetime import datetime
 import os
 from dotenv import load_dotenv
 from apscheduler.schedulers.background import BackgroundScheduler
+from fastapi.responses import Response
+
 
 load_dotenv()
+
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
@@ -80,8 +83,12 @@ class UserVideos(BaseModel):
 
 app = FastAPI(debug=True)
 
+@app.get("/")
+def read_root():
+    return {"status": "FastAPI backend is running!", "endpoints": ["/get_tiktok_data", "/add_tiktok_data", "/get_user_videos", "/add_user_videos", "/docs"]}
+
 origins = [
-    "http://localhost:5173"
+    "http://localhost:5173",
 ]
 
 app.add_middleware(
@@ -197,6 +204,11 @@ def get_user_videos(db: Session = Depends(get_db)):
         )
         for item in data
     ]
+
+
+@app.get("/favicon.ico")
+async def favicon():
+    return Response(content="", media_type="image/x-icon")
 
 
 async def init_data():

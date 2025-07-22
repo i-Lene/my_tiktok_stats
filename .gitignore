@@ -30,3 +30,5 @@ dist-ssr
 .db
 *.sqlite
 *.db
+*.sqlite3
+*/backend/tiktok_user_data.db

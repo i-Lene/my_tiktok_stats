@@ -15,7 +15,7 @@ async def myTikTokSatus():
             num_sessions=1,
             sleep_after=3,
             browser='chromium',
-            headless=False
+            headless=True
         )
 
         user = api.user("gingerflwrs")

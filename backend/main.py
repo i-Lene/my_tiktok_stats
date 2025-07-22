@@ -212,13 +212,6 @@ def favicon():
     return Response(content="", media_type="image/x-icon")
 
 
-@app.on_event("startup")
-async def startup_event():
-    schedule_daily_collection()
-    await init_data()
-    await init_videos()
-
-
 async def init_data():
     data = await myTikTokSatus()
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -294,6 +287,12 @@ def schedule_daily_collection():
     scheduler.add_job(run_data_collection, 'cron', hour=00, minute=00)
     scheduler.start()
 
+
+@app.on_event("startup")
+async def startup_event():
+    schedule_daily_collection()
+    await init_data()
+    await init_videos()
 
 if __name__ == "__main__":
     schedule_daily_collection()

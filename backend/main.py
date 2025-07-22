@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi.responses import Response
 
+
 load_dotenv()
 
 
@@ -209,7 +210,7 @@ def get_user_videos(db: Session = Depends(get_db)):
 
 
 @app.get("/favicon.ico")
-def favicon():
+async def favicon():
     return Response(content="", media_type="image/x-icon")
 
 
@@ -288,12 +289,6 @@ def schedule_daily_collection():
     scheduler.add_job(run_data_collection, 'cron', hour=00, minute=00)
     scheduler.start()
 
-
-@app.on_event("startup")
-async def startup_event():
-    schedule_daily_collection()
-    await init_data()
-    await init_videos()
 
 if __name__ == "__main__":
     schedule_daily_collection()

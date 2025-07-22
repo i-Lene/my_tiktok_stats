@@ -22,6 +22,8 @@ async def myTikTokSatus():
         user_data = await user.info()
 
         videos = []
+        
+        print('aqui')
 
         async for video in user.videos(count=100000):
             videos.append(video.as_dict)

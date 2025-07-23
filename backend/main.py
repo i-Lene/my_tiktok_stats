@@ -286,7 +286,7 @@ def run_data_collection():
 
 def schedule_daily_collection():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(run_data_collection, 'cron', hour=00, minute=00)
+    scheduler.add_job(run_data_collection, 'cron', hour=14, minute=30)
     scheduler.start()
 
 

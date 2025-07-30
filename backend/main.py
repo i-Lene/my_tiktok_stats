@@ -12,6 +12,7 @@ import os
 from dotenv import load_dotenv
 from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi.responses import Response
+from contextlib import asynccontextmanager
 
 
 load_dotenv()
@@ -81,18 +82,115 @@ class UserVideos(BaseModel):
     createdAt: str = None
 
 
-app = FastAPI(debug=True)
-
-
-@app.get("/")
-def read_root():
-    return {"status": "FastAPI backend is running!", "endpoints": ["/get_tiktok_data", "/add_tiktok_data", "/get_user_videos", "/add_user_videos", "/docs"]}
-
-
 origins = [
     "http://localhost:5173",
     "https://my-tiktok-stats-1.onrender.com"
 ]
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+async def init_data():
+    data = await myTikTokSatus()
+
+    if not data or 'username' not in data:
+        print("Warning: TikTokApi failed or returned empty data. Skipping DB insert in init_data.")
+        return
+
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    db = SessionLocal()
+    try:
+        new_user = TikTokDB(
+            username=data['username'],
+            nickname=data['nickname'],
+            videoCount=data['videoCount'],
+            heartCount=data['heartCount'],
+            friendCount=data['friendCount'],
+            followerCount=data['followerCount'],
+            followingCount=data['followingCount'],
+            avatar=data['avatar'],
+            description=data['description'],
+            createdAt=timestamp
+        )
+        db.add(new_user)
+        db.commit()
+    finally:
+        db.close()
+
+
+async def init_videos():
+    data = await myTikTokSatus()
+    if not data or 'videos' not in data or not data['videos']:
+        print("Warning: TikTokApi failed or returned no videos. Skipping DB insert in init_videos.")
+        return
+
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    db = SessionLocal()
+    try:
+        for video in data['videos']:
+            video_id = video['id']
+            existing_video = db.query(UserVideosDB).filter(
+                UserVideosDB.videoId == video_id).first()
+
+            if existing_video:
+                existing_video.videoName = video['desc']
+                existing_video.viewCount = video['stats']['playCount']
+                existing_video.likeCount = video['stats']['diggCount']
+                existing_video.shareCount = video['stats']['shareCount']
+                existing_video.collectCount = video['stats'].get(
+                    'collectCount', 0)
+                existing_video.commentCount = video['stats'].get(
+                    'commentCount', 0)
+                existing_video.createdAt = video.get('createTime', timestamp)
+            else:
+                new_video = UserVideosDB(
+                    videoId=video_id,
+                    videoName=video['desc'],
+                    viewCount=video['stats']['playCount'],
+                    likeCount=video['stats']['diggCount'],
+                    shareCount=video['stats']['shareCount'],
+                    collectCount=video['stats'].get('collectCount', 0),
+                    commentCount=video['stats'].get('commentCount', 0),
+                    createdAt=video.get('createTime', timestamp)
+                )
+                db.add(new_video)
+        db.commit()
+    finally:
+        db.close()
+
+
+async def run_data_collection():
+    try:
+        await init_data()
+        await init_videos()
+        print("Cron data collection successful")
+    except Exception as e:
+        print("Cron data collection error:", e)
+
+
+def schedule_daily_collection():
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(lambda: asyncio.run(
+        run_data_collection()), 'cron', hour=15, minute=59)
+    scheduler.start()
+
+
+@asynccontextmanager
+async def lifespan(app):
+    schedule_daily_collection()
+    asyncio.create_task(run_data_collection())
+    yield
+
+
+app = FastAPI(debug=True, lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -103,12 +201,9 @@ app.add_middleware(
 )
 
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+@app.get("/")
+def read_root():
+    return {"status": "FastAPI backend is running!", "endpoints": ["/get_tiktok_data", "/add_tiktok_data", "/get_user_videos", "/add_user_videos", "/docs"]}
 
 
 @app.post("/add_tiktok_data", response_model=Entry)
@@ -210,88 +305,9 @@ def get_user_videos(db: Session = Depends(get_db)):
 
 
 @app.get("/favicon.ico")
-async def favicon():
+def favicon():
     return Response(content="", media_type="image/x-icon")
 
 
-async def init_data():
-    data = await myTikTokSatus()
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-    db = SessionLocal()
-    try:
-        existing_user = db.query(TikTokDB).filter(
-            TikTokDB.username == data['username']).first()
-
-        new_user = TikTokDB(
-            username=data['username'],
-            nickname=data['nickname'],
-            videoCount=data['videoCount'],
-            heartCount=data['heartCount'],
-            friendCount=data['friendCount'],
-            followerCount=data['followerCount'],
-            followingCount=data['followingCount'],
-            avatar=data['avatar'],
-            description=data['description'],
-            createdAt=timestamp
-        )
-        db.add(new_user)
-        db.commit()
-    finally:
-        db.close()
-
-
-async def init_videos():
-    data = await myTikTokSatus()
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-    db = SessionLocal()
-    try:
-        for video in data['videos']:
-            video_id = video['id']
-            existing_video = db.query(UserVideosDB).filter(
-                UserVideosDB.videoId == video_id).first()
-
-            if existing_video:
-                existing_video.videoName = video['desc']
-                existing_video.viewCount = video['stats']['playCount']
-                existing_video.likeCount = video['stats']['diggCount']
-                existing_video.shareCount = video['stats']['shareCount']
-                existing_video.collectCount = video['stats'].get(
-                    'collectCount', 0)
-                existing_video.commentCount = video['stats'].get(
-                    'commentCount', 0)
-                existing_video.createdAt = video.get('createTime', timestamp)
-            else:
-                new_video = UserVideosDB(
-                    videoId=video_id,
-                    videoName=video['desc'],
-                    viewCount=video['stats']['playCount'],
-                    likeCount=video['stats']['diggCount'],
-                    shareCount=video['stats']['shareCount'],
-                    collectCount=video['stats'].get('collectCount', 0),
-                    commentCount=video['stats'].get('commentCount', 0),
-                    createdAt=video.get('createTime', timestamp)
-                )
-                db.add(new_video)
-        db.commit()
-    finally:
-        db.close()
-
-
-def run_data_collection():
-    asyncio.run(init_data())
-    asyncio.run(init_videos())
-
-
-def schedule_daily_collection():
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(run_data_collection, 'cron', hour=14, minute=30)
-    scheduler.start()
-
-
 if __name__ == "__main__":
-    schedule_daily_collection()
-    asyncio.run(init_data())
-    asyncio.run(init_videos())
     uvicorn.run(app, host="0.0.0.0", port=8001)

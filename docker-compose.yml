@@ -1,4 +1,5 @@
 version: "3.9"
+
 services:
   backend:
     build: ./backend
@@ -8,6 +9,11 @@ services:
       - ./backend/.env
     volumes:
       - ./backend:/app
+    shm_size: "1gb" 
+    cap_add:
+      - SYS_ADMIN 
+    security_opt:
+      - seccomp:unconfined 
 
   frontend:
     build: ./frontend

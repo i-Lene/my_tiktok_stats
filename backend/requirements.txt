@@ -8,3 +8,4 @@ python-dotenv
 apscheduler
 aiohttp
 TikTokApi
+psycopg2-binary

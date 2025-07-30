@@ -20,7 +20,9 @@ load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+print(f"Using DATABASE_URL: {DATABASE_URL}")    
+
+engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
@@ -179,7 +181,7 @@ async def run_data_collection():
 def schedule_daily_collection():
     scheduler = BackgroundScheduler()
     scheduler.add_job(lambda: asyncio.run(
-        run_data_collection()), 'cron', hour=15, minute=59)
+        run_data_collection()), 'cron', hour=14, minute=40)
     scheduler.start()
 
 

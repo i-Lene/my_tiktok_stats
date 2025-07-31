@@ -9,11 +9,11 @@ services:
       - ./backend/.env
     volumes:
       - ./backend:/app
-    shm_size: "1gb" 
+    shm_size: "1gb"
     cap_add:
-      - SYS_ADMIN 
+      - SYS_ADMIN
     security_opt:
-      - seccomp:unconfined 
+      - seccomp:unconfined
 
   frontend:
     build: ./frontend
@@ -21,3 +21,6 @@ services:
       - "5173:80"
     depends_on:
       - backend
+
+volumes:
+  pgdata:

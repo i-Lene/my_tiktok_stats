@@ -9,3 +9,5 @@ apscheduler
 aiohttp
 TikTokApi
 psycopg2-binary
+netcat
+psycopg2

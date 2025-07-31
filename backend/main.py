@@ -184,7 +184,7 @@ async def run_data_collection():
 def schedule_daily_collection():
     scheduler = BackgroundScheduler()
     scheduler.add_job(lambda: asyncio.run(
-        run_data_collection()), 'cron', hour=18, minute=5)
+        run_data_collection()), 'cron', hour=18, minute=20)
     scheduler.start()
 
 

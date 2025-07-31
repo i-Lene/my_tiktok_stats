@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi.responses import Response
 from contextlib import asynccontextmanager
+from zoneinfo import ZoneInfo
 
 
 load_dotenv()
@@ -20,7 +21,7 @@ load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-print(f"Using DATABASE_URL: {DATABASE_URL}")    
+print(f"Using DATABASE_URL: {DATABASE_URL}")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -105,7 +106,8 @@ async def init_data():
         print("Warning: TikTokApi failed or returned empty data. Skipping DB insert in init_data.")
         return
 
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    timestamp = datetime.now(ZoneInfo("Europe/Lisbon")
+                             ).strftime("%Y-%m-%d %H:%M:%S")
 
     db = SessionLocal()
     try:
@@ -133,7 +135,8 @@ async def init_videos():
         print("Warning: TikTokApi failed or returned no videos. Skipping DB insert in init_videos.")
         return
 
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    timestamp = datetime.now(ZoneInfo("Europe/Lisbon")
+                             ).strftime("%Y-%m-%d %H:%M:%S")
 
     db = SessionLocal()
     try:

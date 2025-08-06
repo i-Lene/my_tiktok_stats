@@ -30,7 +30,8 @@ A full-stack web application that collects and displays TikTok user data and vid
 # backend/.env
 
 DATABASE_URL=postgresql://postgres:yourpassword@localhost:5432/tiktok_project_db
-MS_TOKEN=your_token_here
+MS_TOKEN=your_token_here # get your own MS_TOKEN from your cookies on tiktok.com
+
 ````
 ### 2. Run the app:
 ``` docker-compose up --build ```
@@ -49,10 +50,10 @@ This will start:
 
 ```env
 # backend/.env
-# get your own MS_TOKEN from your cookies on tiktok.com
 
-DATABASE_URL=postgresql://postgres:yourpassword@localhost:5432/tiktok_project_db
-MS_TOKEN=your_token_here 
+DATABASE_URL=sqlite:///./tiktok_data.db # You can use any database supported by SQLAlchemy (PostgreSQL, MySQL, SQLite...), just update the DATABASE_URL with the correct connection string for your chosen database.
+MS_TOKEN=your_token_here  # get your own MS_TOKEN from your cookies on tiktok.com
+
 ````
 ### Backend
 ```

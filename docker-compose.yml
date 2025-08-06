@@ -14,6 +14,22 @@ services:
       - SYS_ADMIN
     security_opt:
       - seccomp:unconfined
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://postgres:matisse123@db:5432/tiktok_project_db
+
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: matisse123
+      POSTGRES_DB: tiktok_project_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
   frontend:
     build: ./frontend

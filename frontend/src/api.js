@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://my-tiktok-stats.onrender.com",
+  baseURL: "http://localhost:8001",
 });
 
 export default api;
